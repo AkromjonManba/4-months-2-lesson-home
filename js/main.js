@@ -1,9 +1,12 @@
-const date = function(a) {
-  return (Math.round(a / 31536000) + 1970);
-}
-let elList = document.querySelector(".list");
+const elList = document.querySelector(".list");
+const elSelect = document.querySelector(".js-select");
+const sortFilmsAToZ = document.querySelector(".sort-js-a__z");
+const sortFilmsZToA = document.querySelector(".sort-js-z__a");
+const date = function (a) {
+  return Math.round(a / 31536000) + 1970;
+};
 
-function appendToDom(array,node) {
+function appendToDom(array, node) {
   for (items of array) {
     let newItem = document.createElement("li");
     let elTitle = document.createElement("h2");
@@ -18,41 +21,38 @@ function appendToDom(array,node) {
     elGenres.textContent = `action: ${items.genres}`;
     elOverview.textContent = `${items.overview}`;
     data.textContent = `Release date of the film: ${date(items.release_date)}`;
-  
-    elImg.setAttribute('class','img')
-    newItem.setAttribute('class','box')
-  
-  
-    newItem.appendChild(elImg)
-    newItem.appendChild(elTitle)
-    newItem.appendChild(elId)
-    newItem.appendChild(elGenres)
-    newItem.appendChild(elOverview)
-    newItem.appendChild(data)
+
+    elImg.setAttribute("class", "img");
+    newItem.setAttribute("class", "box");
+
+    newItem.appendChild(elImg);
+    newItem.appendChild(elTitle);
+    newItem.appendChild(elId);
+    newItem.appendChild(elGenres);
+    newItem.appendChild(elOverview);
+    newItem.appendChild(data);
 
     node.appendChild(newItem);
   }
 }
 
-appendToDom(films, elList)
+appendToDom(films, elList);
 
-let elSelect = document.querySelector('.js-select')
-
-let result = []
-elSelect.addEventListener("change", ()=> {
+let result = [];
+elSelect.addEventListener("change", () => {
   result = [];
   elList.innerHTML = "";
-  let elSelectVal = elSelect.value
+  let elSelectVal = elSelect.value;
   films.forEach((res) => {
-    if(res.genres.includes(elSelectVal)) {
-      result.push(res)
+    if (res.genres.includes(elSelectVal)) {
+      result.push(res);
     }
-  })
-  appendToDom(result,elList)
-})
-
+  });
+  appendToDom(result, elList);
+});
 
 let optionList = new Set();
+
 
 films.forEach((item) => {
   optionList.add(...item.genres);
@@ -62,5 +62,19 @@ optionList.forEach((elment) => {
   let newOption = document.createElement("option");
   newOption.textContent = elment;
   newOption.value = elment;
-  elSelect.appendChild(newOption)
+  newOption.setAttribute("class","options")
+  elSelect.appendChild(newOption);
 });
+elSelect.setAttribute("class","select")
+
+sortFilmsAToZ.addEventListener("click", () => {
+    let sortArray = films.sort((a,b) => (a.title > b.title) ? 1 : -1)
+    elList.innerHTML = ""
+    appendToDom(sortArray,elList)
+})
+
+sortFilmsZToA.addEventListener("click", () => {
+    let sortArray = films.sort((a,b) => (a.title > b.title) ? -1 : 1)
+    elList.innerHTML = ""
+    appendToDom(sortArray,elList)
+})
